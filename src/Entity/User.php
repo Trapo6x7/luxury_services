@@ -35,9 +35,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?bool $confirmed_user = null;
-
-    #[ORM\Column]
     private bool $isVerified = false;
 
     public function getId(): ?int
@@ -113,18 +110,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function isConfirmedUser(): ?bool
-    {
-        return $this->confirmed_user;
-    }
-
-    public function setConfirmedUser(bool $confirmed_user): static
-    {
-        $this->confirmed_user = $confirmed_user;
-
-        return $this;
     }
 
     public function isVerified(): bool

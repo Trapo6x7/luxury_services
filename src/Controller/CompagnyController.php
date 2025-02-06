@@ -11,8 +11,8 @@ final class CompagnyController extends AbstractController
     #[Route('/compagny', name: 'app_ls_compagny')]
     public function compagny(): Response
     {
-        return $this->render('pages/compagny.html.twig', [
-            'controller_name' => 'PagesController',
+        return $this->render('compagny/index.html.twig', [
+            'controller_name' => 'CompagnyController',
         ]);
     }
 

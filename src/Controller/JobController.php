@@ -8,19 +8,26 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class JobController extends AbstractController
 {
-    #[Route('/jobs', name: 'app_ls_jobs')]
+    #[Route('/job', name: 'app_ls_job')]
     public function jobs(): Response
     {
-        return $this->render('jobs/index.html.twig', [
-            'controller_name' => 'PagesController',
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('job/index.html.twig', [
+            'controller_name' => 'JobController',
         ]);
     }
 
-    #[Route('/jobs/{slug}', name: 'app_ls_jobs_show')]
+    #[Route('/job/{slug}', name: 'app_ls_job_show')]
     public function jobsShow(): Response
     {
-        return $this->render('jobs/show.html.twig', [
-            'controller_name' => 'PagesController',
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        return $this->render('job/show.html.twig', [
+            'controller_name' => 'JobController',
         ]);
     }
 }
