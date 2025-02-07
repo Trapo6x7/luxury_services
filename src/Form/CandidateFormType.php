@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class CandidateFormType extends AbstractType
 {
@@ -53,7 +54,12 @@ class CandidateFormType extends AbstractType
                     'value' => '',
                 ]
             ])
-            // add photo here
+            ->add('profilePictureFile', VichFileType::class, [
+                'label' => 'Upload Profile Picture',
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => true,
+            ])
             ->add('country', TextType::class,  [
                 'attr' => [
                     'type' => 'text',
@@ -87,8 +93,18 @@ class CandidateFormType extends AbstractType
                     'value' => '',
                 ]
             ])
-            // add passeport here
-            // add cv here
+            ->add('passportFile', VichFileType::class, [
+                'label' => 'Upload Passport',
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => true,
+            ])
+            ->add('cvFile', VichFileType::class, [
+                'label' => 'Upload CV',
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => true,
+            ])
         ;
     }
 

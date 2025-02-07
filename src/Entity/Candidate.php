@@ -5,7 +5,11 @@ namespace App\Entity;
 use App\Repository\CandidateRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: CandidateRepository::class)]
 class Candidate
 {
@@ -41,6 +45,30 @@ class Candidate
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+     // 📌 Passeport
+     #[ORM\Column(nullable: true)]
+     private ?string $passport = null;
+ 
+     #[Vich\UploadableField(mapping: "candidate_passport", fileNameProperty: "passport")]
+     private ?File $passportFile = null;
+ 
+     // 📌 CV
+     #[ORM\Column(nullable: true)]
+     private ?string $cv = null;
+ 
+     #[Vich\UploadableField(mapping: "candidate_cv", fileNameProperty: "cv")]
+     private ?File $cvFile = null;
+ 
+     // 📌 Photo de profil
+     #[ORM\Column(nullable: true)]
+     private ?string $profilePicture = null;
+ 
+     #[Vich\UploadableField(mapping: "candidate_profile", fileNameProperty: "profilePicture")]
+     private ?File $profilePictureFile = null;
+ 
+     #[ORM\Column(type: "datetime", nullable: true)]
+     private ?\DateTimeImmutable $updatedAt = null;
+ 
     public function getId(): ?int
     {
         return $this->id;
@@ -153,5 +181,72 @@ class Candidate
 
         return $this;
     }
+    public function setPassportFile(?File $file = null): void
+    {
+        $this->passportFile = $file;
+        if ($file) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
 
+    public function getPassportFile(): ?File
+    {
+        return $this->passportFile;
+    }
+
+    public function getPassport(): ?string
+    {
+        return $this->passport;
+    }
+
+    public function setPassport(?string $passport): void
+    {
+        $this->passport = $passport;
+    }
+
+    public function setCvFile(?File $file = null): void
+    {
+        $this->cvFile = $file;
+        if ($file) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getCvFile(): ?File
+    {
+        return $this->cvFile;
+    }
+
+    public function getCv(): ?string
+    {
+        return $this->cv;
+    }
+
+    public function setCv(?string $cv): void
+    {
+        $this->cv = $cv;
+    }
+
+    public function setProfilePictureFile(?File $file = null): void
+    {
+        $this->profilePictureFile = $file;
+        if ($file) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getProfilePictureFile(): ?File
+    {
+        return $this->profilePictureFile;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePicture): void
+    {
+        $this->profilePicture = $profilePicture;
+    }
 }
