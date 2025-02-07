@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Candidate;
 use App\Entity\User;
+use App\Form\CandidateFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -19,23 +21,20 @@ final class ProfileController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $user = $this->getUser();
-  
-        // $form = $this->createForm(ProfileFormType::class, $user);
-        // $form->handleRequest($request);
+        $candidate = new Candidate;
 
-        // if ($form->isSubmitted() && $form->isValid()) {
-      
-            
+        $form = $this->createForm(CandidateFormType::class, $candidate);
+        $form->handleRequest($request);
 
-            $entityManager->persist($user);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($candidate);
             $entityManager->flush();
-      // Redirige l'utilisateur vers la page de profil après une soumission réussie
-    //   return $this->redirectToRoute('app_profile');
-    // }
+            // Redirige l'utilisateur vers la page de profil après une soumission réussie
+            return $this->redirectToRoute('app_profile');
+        }
 
-    return $this->render('profile/index.html.twig', [
-        // 'profileForm' => $form,
-    ]);
+        return $this->render('profile/index.html.twig', [
+            'candidateForm' => $form,
+        ]);
     }
 }

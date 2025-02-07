@@ -28,7 +28,7 @@
 					<h4>
 						<img src="{ asset('img/s9bPVaK.gif')}}" style="height: 80px; width: 201px;">
 						&nbsp;
-																														                            &nbsp; Hooray ! Your profile is complete.
+																																																                            &nbsp; Hooray ! Your profile is complete.
 					</h4>
 					<div class="c100 p100 small complete ">
 						<span>100%</span>
@@ -43,47 +43,55 @@
 		</div>
 	</section>
 
-	<form method="POST" action="#!" accept-charset="UTF-8" id="candidateForm" role="form" data-parsley-validate="" enctype="multipart/form-data"><input name="_token" type="hidden" value="UYfchy67WuTVzhSstPK1RDZEIfgqpKCcLnLyhf8a">
-
-		<section class="section-padding">
-			<div class="container">
-				<div class="row">
-					<h3 class="text-extrabold">Your personal informations</h3>
-					<div class="col-xs-12 col-sm-6 col-md-4">
-						<div
-							class="input-field">
-							   <select id="gender" name="gender">
-                                    <option value="">Choose an option...</option>
-                                    <option value="male">Male</option>
-                                    <option value="female" selected="selected">Female</option>
-                                    <option value="transgender">Transgender</option>
-                                </select>
-                                <label for="gender" class="active">Gender</label>
+	{{ form_start(candidateForm, {
+	'attr' : {
+		'method': 'post',
+		'accept-charset' :'UTF-8',
+		'id' : 'candidateForm',
+		'role' : 'form',
+		'data-parsley-validate' : '',
+		'enctype' : 'multipart/form-data',
+	}
+}) }}
+	<input name="_token" type="hidden" value="UYfchy67WuTVzhSstPK1RDZEIfgqpKCcLnLyhf8a">
+	<section class="section-padding">
+		<div class="container">
+			<div class="row">
+				<h3 class="text-extrabold">Your personal informations</h3>
+				<div class="col-xs-12 col-sm-6 col-md-4">
+					<div class="input-field">
+						<select id="gender" name="gender">
+							<option value="">Choose an option...</option>
+							<option value="male">Male</option>
+							<option value="female" selected="selected">Female</option>
+							<option value="transgender">Transgender</option>
+						</select>
+						<label for="gender" class="active">Gender</label>
 					</div>
 				</div>
 				<div class="clearfix visible-sm"></div>
 				<div class="col-xs-12 col-sm-6 col-md-4">
 					<div class="input-field">
-						<input type="text" class="form-control" name="first_name" id="first_name" value="" required>
-						<label for="first_name">First name</label>
+						{{ form_label(candidateForm.firstname) }}
+						{{ form_widget(candidateForm.firstname) }}
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-4">
 					<div class="input-field">
-						<input type="text" class="form-control" name="last_name" id="last_name" value="" required>
-						<label for="last_name">Last name</label>
+						{{ form_label(candidateForm.lastname) }}
+						{{ form_widget(candidateForm.lastname) }}
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-4">
 					<div class="input-field">
-						<input required="required" id="current_location" name="current_location" type="text" value="">
-						<label for="current_location">Current location</label>
+						{{ form_label(candidateForm.currentlocation) }}
+						{{ form_widget(candidateForm.currentlocation) }}
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-8">
 					<div class="input-field">
-						<input id="address" name="address" type="text" value="">
-						<label for="address">Address</label>
+						{{ form_label(candidateForm.adress) }}
+						{{ form_widget(candidateForm.adress) }}
 					</div>
 				</div>
 			</div>
@@ -111,26 +119,26 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-6">
 							<div class="input-field">
-								<input id="country" name="country" type="text" value="">
-								<label for="country">Country</label>
+								{{ form_label(candidateForm.country) }}
+								{{ form_widget(candidateForm.country) }}
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-6">
 							<div class="input-field">
-								<input id="nationality" name="nationality" type="text" value="">
-								<label for="nationality">Nationality</label>
+								{{ form_label(candidateForm.nationality) }}
+								{{ form_widget(candidateForm.nationality) }}
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-6">
 							<div class="input-field">
-								<input class="datepicker" id="birth_date" name="birth_date" type="text" value="">
-								<label for="birth_date">Birthdate</label>
+								{{ form_label(candidateForm.birthdate) }}
+								{{ form_widget(candidateForm.birthdate) }}
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-6">
 							<div class="input-field">
-								<input id="birth_place" name="birth_place" type="text" value="">
-								<label for="birth_place">Birthplace</label>
+								{{ form_label(candidateForm.birthplace) }}
+								{{ form_widget(candidateForm.birthplace) }}
 							</div>
 						</div>
 					</div>
@@ -257,7 +265,7 @@
 					</button>
 				</div>
 			</div>
-
 		</div>
+		{{ form_end(candidateForm) }}
 	</section>
 </form>{% endblock %}
