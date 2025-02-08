@@ -28,7 +28,7 @@
 					<h4>
 						<img src="{ asset('img/s9bPVaK.gif')}}" style="height: 80px; width: 201px;">
 						&nbsp;
-																																																                            &nbsp; Hooray ! Your profile is complete.
+																																																												                            &nbsp; Hooray ! Your profile is complete.
 					</h4>
 					<div class="c100 p100 small complete ">
 						<span>100%</span>
@@ -60,12 +60,8 @@
 				<h3 class="text-extrabold">Your personal informations</h3>
 				<div class="col-xs-12 col-sm-6 col-md-4">
 					<div class="input-field">
-						<select id="gender" name="gender">
-							<option value="">Choose an option...</option>
-							<option value="male">Male</option>
-							<option value="female" selected="selected">Female</option>
-							<option value="transgender">Transgender</option>
-						</select>
+					 {{ form_widget(candidateForm.gender) }}
+					 {{ form_errors(candidateForm.gender) }}
 						<label for="gender" class="active">Gender</label>
 					</div>
 				</div>
@@ -102,7 +98,8 @@
 							<span>
 								<i class="material-icons">insert_photo</i>
 								Photo</span>
-							<input id="photo" size="20000000" accept=".pdf,.jpg,.doc,.docx,.png,.gif" name="photo" type="file">
+							{{ form_widget(candidateForm.profilePictureFile) }}
+							{{ form_errors(candidateForm.profilePictureFile) }}
 						</div>
 
 						<div class="existing-file">
@@ -154,7 +151,8 @@
 								<span>
 									<i class="material-icons">&#xE24D;</i>
 									Passport</span>
-								<input id="passport" size="20000000" accept=".pdf,.jpg,.doc,.docx,.png,.gif" name="passport" type="file">
+								{{ form_widget(candidateForm.passportFile) }}
+								{{ form_errors(candidateForm.passportFile) }}
 							</div>
 							<div class="existing-file">
 								<a href="#!" target="_blank">
@@ -171,7 +169,8 @@
 								<span>
 									<i class="material-icons">&#xE24D;</i>
 									CV</span>
-								<input id="cv" size="20000000" accept=".pdf,.jpg,.doc,.docx,.png,.gif" name="cv" type="file">
+								{{ form_widget(candidateForm.cvFile) }}
+								{{ form_errors(candidateForm.cvFile) }}
 							</div>
 
 							<div class="existing-file">
@@ -266,6 +265,6 @@
 				</div>
 			</div>
 		</div>
-		{{ form_end(candidateForm) }}
 	</section>
-</form>{% endblock %}
+		{{ form_end(candidateForm) }}
+{% endblock %}

@@ -3,13 +3,17 @@
 namespace App\Form;
 
 use App\Entity\Candidate;
+use App\Entity\Gender;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class CandidateFormType extends AbstractType
 {
@@ -17,6 +21,13 @@ class CandidateFormType extends AbstractType
     {
         $builder
             // add gender here
+            ->add('gender', EntityType::class, [
+                'class' => Gender::class,
+                'attr' => [
+                    'id' => "gender",
+                    'name' => "gender",
+                ]
+            ])
             ->add('firstname', TextType::class,  [
                 'attr' => [
                     'type' => 'text',
@@ -54,12 +65,19 @@ class CandidateFormType extends AbstractType
                     'value' => '',
                 ]
             ])
-            ->add('profilePictureFile', VichFileType::class, [
+            ->add('profilePictureFile', FileType::class, [
                 'label' => 'Upload Profile Picture',
                 'required' => false,
-                'allow_delete' => true,
-                'download_uri' => true,
+                'attr' => [
+                    'type' => 'file',
+                    'class' => 'form-control',
+                    'name' => 'photo',
+                    'id' => 'photo',
+                    'accept' => '.pdf,.jpg,.doc,.docx,.png,.gif',
+                    'size' => 20000000
+                ]
             ])
+            // id="photo" size="20000000" accept=".pdf,.jpg,.doc,.docx,.png,.gif" name="photo" type="file"
             ->add('country', TextType::class,  [
                 'attr' => [
                     'type' => 'text',
@@ -93,18 +111,31 @@ class CandidateFormType extends AbstractType
                     'value' => '',
                 ]
             ])
-            ->add('passportFile', VichFileType::class, [
+            ->add('passportFile', FileType::class, [
                 'label' => 'Upload Passport',
                 'required' => false,
-                'allow_delete' => true,
-                'download_uri' => true,
+                'attr' => [
+                    'type' => 'file',
+                    'class' => 'form-control',
+                    'name' => 'photo',
+                    'id' => 'photo',
+                    'accept' => '.pdf,.jpg,.doc,.docx,.png,.gif',
+                    'size' => 20000000
+                ]
             ])
-            ->add('cvFile', VichFileType::class, [
+            ->add('cvFile', FileType::class, [
                 'label' => 'Upload CV',
                 'required' => false,
-                'allow_delete' => true,
-                'download_uri' => true,
+                'attr' => [
+                    'type' => 'file',
+                    'class' => 'form-control',
+                    'name' => 'photo',
+                    'id' => 'photo',
+                    'accept' => '.pdf,.jpg,.doc,.docx,.png,.gif',
+                    'size' => 20000000
+                ]
             ])
+            // id="photo" size="20000000" accept=".pdf,.jpg,.doc,.docx,.png,.gif" name="photo" type="file"
         ;
     }
 

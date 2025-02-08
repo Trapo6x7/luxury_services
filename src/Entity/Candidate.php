@@ -68,6 +68,15 @@ class Candidate
  
      #[ORM\Column(type: "datetime", nullable: true)]
      private ?\DateTimeImmutable $updatedAt = null;
+
+     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+     private ?Gender $gender = null;
+
+     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+     private ?JobCategory $job_category = null;
+
+     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+     private ?Experience $experience = null;
  
     public function getId(): ?int
     {
@@ -248,5 +257,41 @@ class Candidate
     public function setProfilePicture(?string $profilePicture): void
     {
         $this->profilePicture = $profilePicture;
+    }
+
+    public function getGender(): ?Gender
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?Gender $gender): static
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getJobCategory(): ?JobCategory
+    {
+        return $this->job_category;
+    }
+
+    public function setJobCategory(?JobCategory $job_category): static
+    {
+        $this->job_category = $job_category;
+
+        return $this;
+    }
+
+    public function getExperience(): ?Experience
+    {
+        return $this->experience;
+    }
+
+    public function setExperience(?Experience $experience): static
+    {
+        $this->experience = $experience;
+
+        return $this;
     }
 }
