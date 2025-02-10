@@ -18,66 +18,60 @@ class Candidate
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $currentlocation = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $adress = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $country = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $nationality = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $birthplace = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\OneToOne(targetEntity: Gender::class, inversedBy: 'candidate')]
+    #[ORM\JoinColumn(name: 'gender_id', referencedColumnName: 'id', nullable: true)]
+    private ?Gender $gender = null;
+
+    #[ORM\OneToOne(targetEntity: JobCategory::class, inversedBy: 'candidate')]
+    #[ORM\JoinColumn(name: 'job_category_id', referencedColumnName: 'id', nullable: true)]
+    private ?JobCategory $jobCategory = null;
+
+    #[ORM\OneToOne(targetEntity: Experience::class, inversedBy: 'candidate')]
+    #[ORM\JoinColumn(name: 'experience_id', referencedColumnName: 'id', nullable: true)]
+    private ?Experience $experience = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cv_path = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $passport_path = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profilepicture_path = null;
+
+
+    #[ORM\OneToOne(inversedBy: 'candidate', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
-     // 📌 Passeport
-     #[ORM\Column(nullable: true)]
-     private ?string $passport = null;
- 
-     #[Vich\UploadableField(mapping: "candidate_passport", fileNameProperty: "passport")]
-     private ?File $passportFile = null;
- 
-     // 📌 CV
-     #[ORM\Column(nullable: true)]
-     private ?string $cv = null;
- 
-     #[Vich\UploadableField(mapping: "candidate_cv", fileNameProperty: "cv")]
-     private ?File $cvFile = null;
- 
-     // 📌 Photo de profil
-     #[ORM\Column(nullable: true)]
-     private ?string $profilePicture = null;
- 
-     #[Vich\UploadableField(mapping: "candidate_profile", fileNameProperty: "profilePicture")]
-     private ?File $profilePictureFile = null;
- 
-     #[ORM\Column(type: "datetime", nullable: true)]
-     private ?\DateTimeImmutable $updatedAt = null;
-
-     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-     private ?Gender $gender = null;
-
-     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-     private ?JobCategory $job_category = null;
-
-     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-     private ?Experience $experience = null;
- 
     public function getId(): ?int
     {
         return $this->id;
@@ -179,86 +173,6 @@ class Candidate
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-    public function setPassportFile(?File $file = null): void
-    {
-        $this->passportFile = $file;
-        if ($file) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function getPassportFile(): ?File
-    {
-        return $this->passportFile;
-    }
-
-    public function getPassport(): ?string
-    {
-        return $this->passport;
-    }
-
-    public function setPassport(?string $passport): void
-    {
-        $this->passport = $passport;
-    }
-
-    public function setCvFile(?File $file = null): void
-    {
-        $this->cvFile = $file;
-        if ($file) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function getCvFile(): ?File
-    {
-        return $this->cvFile;
-    }
-
-    public function getCv(): ?string
-    {
-        return $this->cv;
-    }
-
-    public function setCv(?string $cv): void
-    {
-        $this->cv = $cv;
-    }
-
-    public function setProfilePictureFile(?File $file = null): void
-    {
-        $this->profilePictureFile = $file;
-        if ($file) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function getProfilePictureFile(): ?File
-    {
-        return $this->profilePictureFile;
-    }
-
-    public function getProfilePicture(): ?string
-    {
-        return $this->profilePicture;
-    }
-
-    public function setProfilePicture(?string $profilePicture): void
-    {
-        $this->profilePicture = $profilePicture;
-    }
-
     public function getGender(): ?Gender
     {
         return $this->gender;
@@ -271,15 +185,15 @@ class Candidate
         return $this;
     }
 
+    // Getter et setter pour jobCategory
     public function getJobCategory(): ?JobCategory
     {
-        return $this->job_category;
+        return $this->jobCategory;
     }
 
-    public function setJobCategory(?JobCategory $job_category): static
+    public function setJobCategory(?JobCategory $jobCategory): self
     {
-        $this->job_category = $job_category;
-
+        $this->jobCategory = $jobCategory;
         return $this;
     }
 
@@ -291,6 +205,54 @@ class Candidate
     public function setExperience(?Experience $experience): static
     {
         $this->experience = $experience;
+
+        return $this;
+    }
+
+    public function getCvPath(): ?string
+    {
+        return $this->cv_path;
+    }
+
+    public function setCvPath(string $cv_path): static
+    {
+        $this->cv_path = $cv_path;
+
+        return $this;
+    }
+
+    public function getPassportPath(): ?string
+    {
+        return $this->passport_path;
+    }
+
+    public function setPassportPath(string $passport_path): static
+    {
+        $this->passport_path = $passport_path;
+
+        return $this;
+    }
+
+    public function getProfilepicturePath(): ?string
+    {
+        return $this->profilepicture_path;
+    }
+
+    public function setProfilepicturePath(string $profilepicture_path): static
+    {
+        $this->profilepicture_path = $profilepicture_path;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

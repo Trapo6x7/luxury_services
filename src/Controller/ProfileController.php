@@ -21,7 +21,22 @@ final class ProfileController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $candidate = new Candidate;
+
+        /** @var User */
+        $user = $this->getUser();
+
+        $candidate = $user->getCandidate();
+ 
+        if (!$candidate) {
+            $candidate = new Candidate();
+            $candidate->setUser($user);
+            $entityManager->persist($candidate);
+            $entityManager->flush();
+        }
+
+        if (!$user->isVerified()) {
+            return $this->render('errors/not-verified.html.twig', []);
+        }
 
         $form = $this->createForm(CandidateFormType::class, $candidate);
         $form->handleRequest($request);
@@ -30,7 +45,8 @@ final class ProfileController extends AbstractController
             $entityManager->persist($candidate);
             $entityManager->flush();
             // Redirige l'utilisateur vers la page de profil après une soumission réussie
-            return $this->redirectToRoute('app_profile');
+
+            $this->addFlash('success', 'Profile updated successfully');
         }
 
         return $this->render('profile/index.html.twig', [

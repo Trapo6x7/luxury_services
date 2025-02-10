@@ -16,6 +16,9 @@ class Gender
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\OneToOne(mappedBy: 'gender', cascade: ['persist', 'remove'])]
+    private ?Candidate $candidate = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -32,4 +35,16 @@ class Gender
 
         return $this;
     }
+    
+     // Getter et setter pour candidate
+     public function getCandidate(): ?Candidate
+     {
+         return $this->candidate;
+     }
+ 
+     public function setCandidate(?Candidate $candidate): self
+     {
+         $this->candidate = $candidate;
+         return $this;
+     }
 }

@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Candidate;
+use App\Entity\Experience;
 use App\Entity\Gender;
+use App\Entity\JobCategory;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -11,9 +13,13 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CandidateFormType extends AbstractType
 {
@@ -23,10 +29,16 @@ class CandidateFormType extends AbstractType
             // add gender here
             ->add('gender', EntityType::class, [
                 'class' => Gender::class,
+                'choice_label' => 'name',  
+                'choice_value' => 'id', 
+                'expanded' => false, 
+                'multiple' => false, 
                 'attr' => [
                     'id' => "gender",
                     'name' => "gender",
-                ]
+                    'required' => false
+                ],
+                'placeholder' => 'Choose a gender please...',
             ])
             ->add('firstname', TextType::class,  [
                 'attr' => [
@@ -35,7 +47,7 @@ class CandidateFormType extends AbstractType
                     'name' => 'first_name',
                     'id' => 'first_name',
                     'value' => '',
-                    'required' => true
+                    'required' => false
                 ]
             ])
             ->add('lastname', TextType::class,  [
@@ -45,7 +57,7 @@ class CandidateFormType extends AbstractType
                     'name' => 'last_name',
                     'id' => 'last_name',
                     'value' => '',
-                    'required' => true
+                    'required' => false
                 ]
             ])
             ->add('currentlocation', TextType::class,  [
@@ -54,7 +66,7 @@ class CandidateFormType extends AbstractType
                     'name' => 'current_location',
                     'id' => 'current_location',
                     'value' => '',
-                    'required' => true
+                    'required' => false
                 ]
             ])
             ->add('adress', TextType::class,  [
@@ -63,27 +75,30 @@ class CandidateFormType extends AbstractType
                     'name' => 'address',
                     'id' => 'address',
                     'value' => '',
+                    'required' => false
                 ]
             ])
-            ->add('profilePictureFile', FileType::class, [
+            ->add('profilePicture_path', FileType::class, [
                 'label' => 'Upload Profile Picture',
-                'required' => false,
+
                 'attr' => [
                     'type' => 'file',
                     'class' => 'form-control',
                     'name' => 'photo',
                     'id' => 'photo',
                     'accept' => '.pdf,.jpg,.doc,.docx,.png,.gif',
-                    'size' => 20000000
+                    'required' => false,
+                    'size' => 20000000,
+                    'mapped' => false
                 ]
             ])
-            // id="photo" size="20000000" accept=".pdf,.jpg,.doc,.docx,.png,.gif" name="photo" type="file"
             ->add('country', TextType::class,  [
                 'attr' => [
                     'type' => 'text',
                     'name' => 'country',
                     'id' => 'country',
                     'value' => '',
+                    'required' => false
                 ]
             ])
             ->add('nationality', TextType::class,  [
@@ -91,6 +106,7 @@ class CandidateFormType extends AbstractType
                     'type' => 'text',
                     'name' => 'nationality',
                     'id' => 'nationality',
+                    'required' => false,
                     'value' => '',
                 ]
             ])
@@ -101,6 +117,7 @@ class CandidateFormType extends AbstractType
                     'name' => 'birth_date',
                     'id' => 'birth_date',
                     'value' => '',
+                    'required' => false
                 ]
             ])
             ->add('birthplace', TextType::class,  [
@@ -109,33 +126,63 @@ class CandidateFormType extends AbstractType
                     'name' => 'birth_place',
                     'id' => 'birth_place',
                     'value' => '',
+                    'required' => false
                 ]
             ])
-            ->add('passportFile', FileType::class, [
+            ->add('passport_path', FileType::class, [
                 'label' => 'Upload Passport',
-                'required' => false,
+
                 'attr' => [
                     'type' => 'file',
                     'class' => 'form-control',
-                    'name' => 'photo',
-                    'id' => 'photo',
+                    'name' => 'passport',
+                    'id' => 'passport',
                     'accept' => '.pdf,.jpg,.doc,.docx,.png,.gif',
-                    'size' => 20000000
+                    'required' => false,
+                    'size' => 20000000,
+                    'mapped' => false
                 ]
             ])
-            ->add('cvFile', FileType::class, [
+            ->add('cv_path', FileType::class, [
                 'label' => 'Upload CV',
-                'required' => false,
+
                 'attr' => [
                     'type' => 'file',
                     'class' => 'form-control',
-                    'name' => 'photo',
-                    'id' => 'photo',
+                    'name' => 'cv',
+                    'id' => 'cv',
                     'accept' => '.pdf,.jpg,.doc,.docx,.png,.gif',
-                    'size' => 20000000
+                    'required' => false,
+                    'size' => 20000000,
+                    'mapped' => false
                 ]
             ])
-            // id="photo" size="20000000" accept=".pdf,.jpg,.doc,.docx,.png,.gif" name="photo" type="file"
+            ->add('experience', EntityType::class, [
+                'class' => Experience::class,
+                'choice_label' => 'experience',  // Assure-toi que Gender a bien une propriété "name"
+                'choice_value' => 'id',  // Associe chaque option à son ID
+                'expanded' => false, // Assure que c'est bien un <select> et pas des radios
+                'multiple' => false, // Ne pas afficher comme une liste multiple
+                'attr' => [
+                    'id' => "experience",
+                    'name' => "experience",
+                    'required' => false
+                ],
+                'placeholder' => 'Choose an experience please...',
+            ])
+            ->add('job_category', EntityType::class, [
+                'class' => JobCategory::class,
+                'choice_label' => 'category',
+                'choice_value' => 'id',
+                'expanded' => false,
+                'multiple' => false,
+                'attr' => [
+                    'id' => "job_sector",
+                    'name' => "job_sector[]",
+                    'required' => false
+                ],
+                'placeholder' => 'Choose a category please...'
+            ])
         ;
     }
 

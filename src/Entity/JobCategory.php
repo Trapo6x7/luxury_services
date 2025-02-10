@@ -15,7 +15,21 @@ class JobCategory
 
     #[ORM\Column(length: 255)]
     private ?string $category = null;
+    
+    #[ORM\OneToOne(mappedBy: 'jobCategory', cascade: ['persist', 'remove'])]
+    private ?Candidate $candidate = null;
 
+    // Getter et setter pour candidate
+    public function getCandidate(): ?Candidate
+    {
+        return $this->candidate;
+    }
+
+    public function setCandidate(?Candidate $candidate): self
+    {
+        $this->candidate = $candidate;
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id;
