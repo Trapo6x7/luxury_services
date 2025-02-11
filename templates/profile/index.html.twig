@@ -40,7 +40,7 @@
 					<h4>
 						<img src="{ asset('img/s9bPVaK.gif')}}" style="height: 80px; width: 201px;">
 						&nbsp;
-																																																																																										                            &nbsp; Hooray ! Your profile is complete.
+																																																																																																                            &nbsp; Hooray ! Your profile is complete.
 					</h4>
 					<div class="c100 p100 small complete ">
 						<span>100%</span>
@@ -110,9 +110,12 @@
 							<span>
 								<i class="material-icons">insert_photo</i>
 								Photo</span>
-							{{ form_widget(candidateForm.profilePicture_path) }}
-							{{ form_errors(candidateForm.profilePicture_path) }}
+							{{ form_widget(candidateForm.profilePictureFile) }}
+							{{ form_errors(candidateForm.profilePictureFile) }}
 						</div>
+						{# {% if candidate.ProfilepicturePath %}
+    <img src="{{ asset(candidate.ProfilepicturePath) }}" alt="Profile Picture">
+{% endif %} #}
 
 						<div class="existing-file">
 							<a href="#!" target="_blank">
@@ -163,8 +166,8 @@
 								<span>
 									<i class="material-icons">&#xE24D;</i>
 									Passport</span>
-								{{ form_widget(candidateForm.passport_path) }}
-								{{ form_errors(candidateForm.passport_path) }}
+								{{ form_widget(candidateForm.passportFile) }}
+								{{ form_errors(candidateForm.passportFile) }}
 							</div>
 							<div class="existing-file">
 								<a href="#!" target="_blank">
@@ -181,8 +184,8 @@
 								<span>
 									<i class="material-icons">&#xE24D;</i>
 									CV</span>
-								{{ form_widget(candidateForm.cv_path) }}
-								{{ form_errors(candidateForm.cv_path) }}
+								{{ form_widget(candidateForm.cvFile) }}
+								{{ form_errors(candidateForm.cvFile) }}
 							</div>
 
 							<div class="existing-file">
@@ -216,8 +219,9 @@
 				</div>
 				<div class="col-xs-12 col-sm-12">
 					<div class="input-field">
-						<textarea class="materialize-textarea" id="description" name="description" cols="50" rows="10"></textarea>
-						<label for="description">Short description for your profile, as well as more personnal informations (e.g. your hobbies/interests ). You can also paste any link you want.</label>
+						{{ form_widget(candidateForm.description) }}
+						<label for="{{ candidateForm.description.vars.id }}" class="{% if candidateForm.description.vars.value %}active{% endif %}">{{ candidateForm.description.vars.label }}</label>
+						{{ form_errors(candidateForm.description) }}
 					</div>
 				</div>
 			</div>
@@ -229,8 +233,7 @@
 			<div class="row">
 				<h3 class="text-extrabold">Your K-Yachting account</h3>
 				<div class="col-xs-12 col-sm-4">
-					<div
-						class="input-field">{# MAIL #}
+					<div class="input-field">
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4">

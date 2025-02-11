@@ -3,13 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\CandidateRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: CandidateRepository::class)]
 class Candidate
 {
@@ -37,14 +35,22 @@ class Candidate
     private ?string $nationality = null;
 
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $birthdate = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $birthdate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $birthplace = null;
 
-    #[ORM\Column(type: "datetime", nullable: true)]
+    #[ORM\Column]
+    #[Assert\NotNull]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    #[Assert\NotNull]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deletedAt = null;
 
     #[ORM\OneToOne(targetEntity: Gender::class, inversedBy: 'candidate')]
     #[ORM\JoinColumn(name: 'gender_id', referencedColumnName: 'id', nullable: true)]
@@ -58,19 +64,37 @@ class Candidate
     #[ORM\JoinColumn(name: 'experience_id', referencedColumnName: 'id', nullable: true)]
     private ?Experience $experience = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $cv_path = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $passport_path = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profilepicture_path = null;
-
-
     #[ORM\OneToOne(inversedBy: 'candidate', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $passportFile = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profilePictureFile = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cvFile = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profilePicture = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $passport = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cv = null;
+
+    public function __construct(DateTimeImmutable $createdAt = new DateTimeImmutable(), DateTimeImmutable $updatedAt = new DateTimeImmutable())
+    {
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
+    }
+
 
     public function getId(): ?int
     {
@@ -149,12 +173,12 @@ class Candidate
         return $this;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
+    public function getBirthdate(): ?DateTimeImmutable
     {
         return $this->birthdate;
     }
 
-    public function setBirthdate(\DateTimeInterface $birthdate): static
+    public function setBirthdate(DateTimeImmutable $birthdate): static
     {
         $this->birthdate = $birthdate;
 
@@ -209,42 +233,6 @@ class Candidate
         return $this;
     }
 
-    public function getCvPath(): ?string
-    {
-        return $this->cv_path;
-    }
-
-    public function setCvPath(string $cv_path): static
-    {
-        $this->cv_path = $cv_path;
-
-        return $this;
-    }
-
-    public function getPassportPath(): ?string
-    {
-        return $this->passport_path;
-    }
-
-    public function setPassportPath(string $passport_path): static
-    {
-        $this->passport_path = $passport_path;
-
-        return $this;
-    }
-
-    public function getProfilepicturePath(): ?string
-    {
-        return $this->profilepicture_path;
-    }
-
-    public function setProfilepicturePath(string $profilepicture_path): static
-    {
-        $this->profilepicture_path = $profilepicture_path;
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -253,6 +241,151 @@ class Candidate
     public function setUser(User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of updatedAt
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set the value of updatedAt
+     *
+     * @return  self
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of createdAt
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set the value of createdAt
+     *
+     * @return  self
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of deletedAt
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * Set the value of deletedAt
+     *
+     * @return  self
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function getPassportFile(): ?string
+    {
+        return $this->passportFile;
+    }
+
+    public function setPassportFile(?string $passportFile): static
+    {
+        $this->passportFile = $passportFile;
+
+        return $this;
+    }
+
+    public function getProfilePictureFile(): ?string
+    {
+        return $this->profilePictureFile;
+    }
+
+    public function setProfilePictureFile(?string $profilePicureFile): static
+    {
+        $this->profilePictureFile = $profilePicureFile;
+
+        return $this;
+    }
+
+    public function getCvFile(): ?string
+    {
+        return $this->cvFile;
+    }
+
+    public function setCvFile(?string $cvFile): static
+    {
+        $this->cvFile = $cvFile;
+
+        return $this;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePicture): static
+    {
+        $this->profilePicture = $profilePicture;
+
+        return $this;
+    }
+
+    public function getPassport(): ?string
+    {
+        return $this->passport;
+    }
+
+    public function setPassport(?string $passport): static
+    {
+        $this->passport = $passport;
+
+        return $this;
+    }
+
+    public function getCv(): ?string
+    {
+        return $this->cv;
+    }
+
+    public function setCv(?string $cv): static
+    {
+        $this->cv = $cv;
 
         return $this;
     }
