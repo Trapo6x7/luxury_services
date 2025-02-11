@@ -175,6 +175,42 @@ class CandidateFormType extends AbstractType
                 'placeholder' => 'Choose a category please...',
                 'required' => false
             ])
+            ->add('email', EmailType::class, [
+                'required' => false,
+                'mapped' => false,
+                'label' => 'Email',
+                'attr' => [
+                    'id' => 'email',
+                    'class' => 'form-control',
+                ],
+            ])
+            ->add('newPassword', RepeatedType::class, [
+                'mapped' => false,
+                'required' => false,
+                'type' => PasswordType::class,
+                'first_options' => [
+                    'label' => 'New Password',
+                    'attr' => [
+                        'class' => 'form-control',
+                        'id' => 'password',
+                    ],
+                ],
+                'second_options' => [
+                    'label' => 'Confirm New Password',
+                    'attr' => [
+                        'class' => 'form-control',
+                        'id' => 'password_repeat',
+                    ],
+                ],
+                'invalid_message' => 'The password fields must match.',
+                'constraints' => [
+                    new Length([
+                        'min' => 6,
+                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'max' => 4096,
+                    ]),
+                ],
+            ])
             ->addEventListener(FormEvents::POST_SUBMIT, $this->setUpdatedAt(...))
         ;
     }

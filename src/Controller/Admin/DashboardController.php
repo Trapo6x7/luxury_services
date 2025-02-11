@@ -2,7 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Candidate;
+use App\Entity\Experience;
 use App\Entity\Gender;
+use App\Entity\Job;
+use App\Entity\JobCategory;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -18,7 +22,7 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
 
-        if (!$this->getUser()->getRoles() == "ROLE_ADMIN"){
+        if (!$this->getUser()->getRoles() == "ROLE_ADMIN") {
             return $this->redirectToRoute('app_ls_home');
         }
 
@@ -49,22 +53,25 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-        ->setTitle('Luxury Services')
-        ->setFaviconPath('img/luxury-services-logo.png');
+            ->setTitle('Luxury Services')
+            ->setFaviconPath('img/luxury-services-logo.png');
     }
 
     public function configureMenuItems(): iterable
-    { 
+    {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-tachometer-alt');
 
         yield MenuItem::section('Jobs');
 
 
         yield MenuItem::section('Candidates');
+
         yield MenuItem::linkToCrud('Genders', 'fas fa-venus-mars', Gender::class);
-        
-        
+        yield MenuItem::linkToCrud('Experience', 'fas fa-briefcase', Experience::class);
+        yield MenuItem::linkToCrud('Job Category', 'fas fa-ship', JobCategory::class);
+
         yield MenuItem::section('Recruters');
         yield MenuItem::linkToCrud('Recruters', 'fas fa-user-tie', User::class);
+        yield MenuItem::linkToCrud('Candidate', 'fas fa-user-tie', Candidate::class);
     }
 }

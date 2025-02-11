@@ -7,17 +7,20 @@ use App\Entity\User;
 use App\Form\CandidateFormType;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
-    public function index(Request $request,  FileUploader $fileUploader, EntityManagerInterface $entityManager): Response
+    public function index(Request $request,  FileUploader $fileUploader, EntityManagerInterface $entityManager,  UserPasswordHasherInterface $passwordHasher,    MailerInterface $mailer): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -74,7 +77,33 @@ final class ProfileController extends AbstractController
                 $cvName = $fileUploader->upload($cvFile, $candidate, 'cv', 'cvs');
                 $candidate->setCv($cvName);
             }
+            $email = $form->get('email')->getData();
+            $newPassword = $form->get('newPassword')->getData();
 
+            if ($email || $newPassword) {
+                if ($email && $newPassword) {
+                    if ($user->getEmail() !== $email) {
+                        $this->addFlash('danger', 'The email you entered does not match the email associated with your account.');
+                    } else {
+                        $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+                        $user->setPassword($hashedPassword);
+                        try {
+                            $mail = (new TemplatedEmail())
+                                ->from('support@luxury-services.com')
+                                ->to($user->getEmail())
+                                ->subject('Change of password')
+                                ->htmlTemplate('emails/change-password.html.twig');         
+            
+                            $mailer->send($mail);
+                            $this->addFlash('success', 'Your password has been changed successfully!');
+                        } catch (\Exception $e) {
+                            $this->addFlash('danger', 'An error occurred while sending the message : ' . $e->getMessage());
+                        }
+                    }
+                } else {
+                    $this->addFlash('danger', 'Email and password must be filled together to change password.');
+                }
+            }
             $entityManager->persist($candidate);
             $entityManager->flush();
             // Redirige l'utilisateur vers la page de profil après une soumission réussie
@@ -82,9 +111,24 @@ final class ProfileController extends AbstractController
             return $this->redirectToRoute('app_profile');
         }
 
+        if ($candidate->getProfilePicture()) {
+            $originalProfilePictureFilename = preg_replace('/-\w{13}(?=\.\w{3,4}$)/', '', $candidate->getProfilePicture());
+        }
+
+        if ($candidate->getPassport()) {
+            $originalPassportFilename = preg_replace('/-\w{13}(?=\.\w{3,4}$)/', '', $candidate->getPassport());
+        }
+
+        if ($candidate->getCv()) {
+            $originalCvFilename = preg_replace('/-\w{13}(?=\.\w{3,4}$)/', '', $candidate->getCv());
+        }
+
         return $this->render('profile/index.html.twig', [
-            'candidateForm' => $form,
+            'candidateForm' => $form->createView(),
             'candidate' => $candidate,
+            'originalProfilPicture' => $originalProfilePictureFilename ?? null,
+            'originalPassport' => $originalPassportFilename ?? null,
+            'originalCv' => $originalCvFilename ?? null,
         ]);
     }
     

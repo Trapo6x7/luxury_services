@@ -13,6 +13,54 @@
 	</style>
 {% endblock %}
 
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+  
+
+			const profilPictureInput = document.getElementById('candidate_profilPictureFile');
+			const profilPicturePathInput = document.getElementById('file-path-photo');
+			const existingProfilPictureFile = document.getElementById('existing-file-photo');
+
+			profilPictureInput.addEventListener('change', function () {
+				if (profilPictureInput.files.length > 0) {
+					profilPicturePathInput.value = profilPictureInput.files[0].name;
+					if (existingProfilPictureFile) {
+						existingProfilPictureFile.style.display = 'none';
+					}
+				}
+			});
+
+			const passportInput = document.getElementById('candidate_passportFile');
+			const passportPathInput = document.getElementById('file-path-passport');
+			const existingPassportFile = document.getElementById('existing-file-passport');
+
+			passportInput.addEventListener('change', function () {
+				if (passportInput.files.length > 0) {
+					passportPathInput.value = passportInput.files[0].name;
+					if (existingPassportFile) {
+						existingPassportFile.style.display = 'none';
+					}
+				}
+			});
+
+			const cvInput = document.getElementById('candidate_cvFile');
+			const cvPathInput = document.getElementById('file-path-cv');
+			const existingCvFile = document.getElementById('existing-file-cv');
+
+			cvInput.addEventListener('change', function () {
+				if (cvInput.files.length > 0) {
+					cvPathInput.value = cvInput.files[0].name;
+					if (existingCvFile) {
+						existingCvFile.style.display = 'none';
+					}
+				}
+			});
+		});
+	</script>
+{% endblock %}
+
 {% block body %}
 	<!-- Page Header-->
 	<section class="page-title page-title-bg fixed-bg overlay dark-5 padding-top-160 padding-bottom-80">
@@ -234,16 +282,25 @@
 				<h3 class="text-extrabold">Your K-Yachting account</h3>
 				<div class="col-xs-12 col-sm-4">
 					<div class="input-field">
+						{{ form_widget(candidateForm.email) }}
+						{{ form_label(candidateForm.email) }}
+						{{ form_errors(candidateForm.email) }}
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4">
 					<div
-						class="input-field">{# PASSWORD #}
+						class="input-field">
+									{{ form_widget(candidateForm.newPassword.first) }}
+						{{ form_label(candidateForm.newPassword.first) }}
+						{{ form_errors(candidateForm.newPassword.first) }}
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4">
 					<div
-						class="input-field">{# CONFIRM PASSWORD #}
+						class="input-field">
+											{{ form_widget(candidateForm.newPassword.second) }}
+						{{ form_label(candidateForm.newPassword.second) }}
+						{{ form_errors(candidateForm.newPassword.second) }}
 					</div>
 				</div>
 			</div>
