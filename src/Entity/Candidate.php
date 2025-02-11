@@ -72,15 +72,6 @@ class Candidate
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $passportFile = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profilePictureFile = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $cvFile = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $profilePicture = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -314,42 +305,6 @@ class Candidate
     public function setDeletedAt($deletedAt)
     {
         $this->deletedAt = $deletedAt;
-
-        return $this;
-    }
-
-    public function getPassportFile(): ?string
-    {
-        return $this->passportFile;
-    }
-
-    public function setPassportFile(?string $passportFile): static
-    {
-        $this->passportFile = $passportFile;
-
-        return $this;
-    }
-
-    public function getProfilePictureFile(): ?string
-    {
-        return $this->profilePictureFile;
-    }
-
-    public function setProfilePictureFile(?string $profilePicureFile): static
-    {
-        $this->profilePictureFile = $profilePicureFile;
-
-        return $this;
-    }
-
-    public function getCvFile(): ?string
-    {
-        return $this->cvFile;
-    }
-
-    public function setCvFile(?string $cvFile): static
-    {
-        $this->cvFile = $cvFile;
 
         return $this;
     }
