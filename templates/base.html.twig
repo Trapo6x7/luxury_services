@@ -28,6 +28,7 @@ if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elain
 check = true;
 
 
+
 })(navigator.userAgent || navigator.vendor || window.opera);
 return check;
 })();
@@ -47,7 +48,8 @@ $(handler);
 		<link href="https://assets-luxury.projets.garage404.com/css/revolution-settings.css" rel="stylesheet">
 		<link href="https://assets-luxury.projets.garage404.com/css/revolution-layers.css" rel="stylesheet">
 		<link href="https://assets-luxury.projets.garage404.com/css/revolution-navigation.css" rel="stylesheet">
-
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 		<script src="https://assets-luxury.projets.garage404.com/js/modernizr.js"></script>
 		<script src="https://assets-luxury.projets.garage404.com/js/jquery.js"></script>
 		<script src="https://assets-luxury.projets.garage404.com/js/animated-headline.js"></script>
@@ -83,10 +85,8 @@ $(handler);
 
 	</head>
 
-	{% block customStyle %}
+	{% block customStyle %}{% endblock %}
 
-	{% endblock %}
-	
 	<body id='top'>
 		<header id="header" class="tt-nav transparent-header ">
 			<div class="header-sticky semi-transparent">
@@ -135,34 +135,38 @@ $(handler);
 							</div>
 						</div>
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						{% if app.user %}
-						<ul class="menuzord-menu pull-right light" role="navigation">
-								<li class=" dropdown">
-									<a target="_self" href="{{ path('app_profile') }}">
-										<span> Profile </span>
-									</a>
-								</li>
-								<li class=" dropdown">
-									<a target="_self" href="{{ path('app_logout') }}" class="btn bn-lg gradient secondary btn-block waves-effect waves-light btn-register">
-										<span> Logout </span>
-									</a>
+							{% if app.user %}
+								<ul class="menuzord-menu pull-right light" role="navigation">
+									<li class=" dropdown">
+										<a target="_self" href="{{ path('app_profile') }}">
+											<span>
+												Profile
+											</span>
+										</a>
+									</li>
+									<li class=" dropdown">
+										<a target="_self" href="{{ path('app_logout') }}" class="btn bn-lg gradient secondary btn-block waves-effect waves-light btn-register">
+											<span>
+												Logout
+											</span>
+										</a>
 
-								</li>
-							</ul>
-						{% else %}
-							<ul class="menuzord-menu pull-right light" role="navigation">
-								<li class=" dropdown">
-									<a target="_self" href="{{ path('app_login') }}">
-										<span>Login</span>
-									</a>
-								</li>
-								<li class=" dropdown">
-									<a target="_self" href="{{ path('app_register') }}" class="btn bn-lg gradient secondary btn-block waves-effect waves-light btn-register">
-										<span>Sign Up</span>
-									</a>
+									</li>
+								</ul>
+							{% else %}
+								<ul class="menuzord-menu pull-right light" role="navigation">
+									<li class=" dropdown">
+										<a target="_self" href="{{ path('app_login') }}">
+											<span>Login</span>
+										</a>
+									</li>
+									<li class=" dropdown">
+										<a target="_self" href="{{ path('app_register') }}" class="btn bn-lg gradient secondary btn-block waves-effect waves-light btn-register">
+											<span>Sign Up</span>
+										</a>
 
-								</li>
-							</ul>
+									</li>
+								</ul>
 							{% endif %}
 							<ul class="menuzord-menu pull-right light" role="navigation">
 								<li class="dropdown {{ app.current_route is same as('app_ls_home')  ? 'active' : '' }}">
@@ -195,17 +199,17 @@ $(handler);
 				</div>
 			</div>
 		</header>
-		<div class="base">
+		<div
+			class="base">
 			<!-- Page -->
-			<div class="page"> 
-			{% block body %}{% endblock %}
+			<div class="page"> {% block body %}{% endblock %}
 				</div>
 			</div>
 			<footer class="footer footer-four">
 				<div class="primary-footer brand-bg text-center">
 					<div class="container">
 
-						<a href="#top" class="page-scroll btn-floating btn-large gradient secondary back-top waves-effect waves-light" data-section="#top">
+						<a href="#top" class="zindex page-scroll btn-floating btn-large gradient secondary back-top waves-effect waves-light" data-section="#top">
 							<i class="material-icons">&#xE316;</i>
 						</a>
 
@@ -277,12 +281,12 @@ $(handler);
 			</footer>
 		</body>
 	</html>
-	
-	{% block javascriptfooter %}
-	<script type="text/javascript">
 
-    onAppReady(function() {
-        $('.preload').remove();
-    });
-</script>
-{% endblock %}
+	{% block javascriptfooter %}
+		<script type="text/javascript">
+
+			onAppReady(function () {
+$('.preload').remove();
+});
+		</script>
+	{% endblock %}

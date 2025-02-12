@@ -36,6 +36,9 @@ class Job
     #[ORM\ManyToOne(inversedBy: 'job')]
     private ?Recruiter $recruiter = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Contract $contract = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +124,18 @@ class Job
     public function setRecruiter(?Recruiter $recruiter): static
     {
         $this->recruiter = $recruiter;
+
+        return $this;
+    }
+
+    public function getContract(): ?Contract
+    {
+        return $this->contract;
+    }
+
+    public function setContract(?Contract $contract): static
+    {
+        $this->contract = $contract;
 
         return $this;
     }

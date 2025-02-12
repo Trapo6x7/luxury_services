@@ -133,6 +133,9 @@ body .log-section form .links a {
     position: relative;
     top: 1px
 }
+.zindex{
+    z-index: 3000
+}
 .contact-info .address,.contact-info .phone,.contact-info .mail {
     margin-bottom: 30px;
     overflow: hidden
