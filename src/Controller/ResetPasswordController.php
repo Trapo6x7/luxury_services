@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\ChangePasswordType;
-use App\Form\ResetPasswordRequestType;
+use App\Form\ResetPasswordType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,11 +21,12 @@ final class ResetPasswordController extends AbstractController
     #[Route('/reset-password', name: 'app_forgot_password_request')]
     public function request(Request $request, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator, MailerInterface $mailer, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ResetPasswordRequestType::class);
+        $form = $this->createForm(ResetPasswordType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->get('email')->getData();
+            $formData = $form->getData();
+            $email = $formData['email'];
             /** @var User */
             $user = $userRepository->findOneBy(['email' => $email]);
 
