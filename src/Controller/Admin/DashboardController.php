@@ -7,20 +7,30 @@ use App\Entity\Experience;
 use App\Entity\Gender;
 use App\Entity\Job;
 use App\Entity\JobCategory;
+use App\Entity\Recruiter;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
+    private Security $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/admin')]
     public function index(): Response
     {
+
 
         if (!$this->getUser()->getRoles() == "ROLE_ADMIN") {
             return $this->redirectToRoute('app_ls_home');
@@ -59,19 +69,39 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        $user = $this->security->getUser();
+        $roles = $user->getRoles();
+
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-tachometer-alt');
 
-        yield MenuItem::section('Jobs');
+        /** @var User $user */
+        if (in_array('ROLE_ADMIN', $roles)) {
 
+            yield MenuItem::section('Candidates');
+            yield MenuItem::linkToCrud('Genders', 'fas fa-venus-mars', Gender::class);
+            yield MenuItem::linkToCrud('Experience', 'fas fa-briefcase', Experience::class);
+            yield MenuItem::linkToCrud('Job Category', 'fas fa-ship', JobCategory::class);
 
-        yield MenuItem::section('Candidates');
+            yield MenuItem::section('Users');
+            yield MenuItem::linkToCrud('User', 'fas fa-user-tie', User::class);
+            yield MenuItem::linkToCrud('Candidate', 'fas fa-user-tie', Candidate::class);
 
-        yield MenuItem::linkToCrud('Genders', 'fas fa-venus-mars', Gender::class);
-        yield MenuItem::linkToCrud('Experience', 'fas fa-briefcase', Experience::class);
-        yield MenuItem::linkToCrud('Job Category', 'fas fa-ship', JobCategory::class);
+            yield MenuItem::section('Recruters');
+            yield MenuItem::linkToCrud('Company', 'fas fa-user-tie', Recruiter::class);
 
-        yield MenuItem::section('Recruters');
-        yield MenuItem::linkToCrud('Recruters', 'fas fa-user-tie', User::class);
-        yield MenuItem::linkToCrud('Candidate', 'fas fa-user-tie', Candidate::class);
+            yield MenuItem::section('Jobs');
+            yield MenuItem::linkToCrud('Category', 'fas fa-user-tie', JobCategory::class);
+            yield MenuItem::linkToCrud('Offer', 'fas fa-user-tie', Job::class);
+
+        } else if (in_array('ROLE_RECRUITER', $roles)) {
+
+            yield MenuItem::section('Recruters');
+            yield MenuItem::linkToCrud('Company', 'fas fa-user-tie', Recruiter::class);
+
+            yield MenuItem::section('Jobs');
+            yield MenuItem::linkToCrud('Category', 'fas fa-user-tie', JobCategory::class);
+            yield MenuItem::linkToCrud('Offer', 'fas fa-user-tie', Job::class);
+            
+        }
     }
 }

@@ -15,7 +15,7 @@ class JobCategory
 
     #[ORM\Column(length: 255)]
     private ?string $category = null;
-    
+
     #[ORM\OneToOne(mappedBy: 'jobCategory', cascade: ['persist', 'remove'])]
     private ?Candidate $candidate = null;
 
@@ -45,5 +45,9 @@ class JobCategory
         $this->category = $category;
 
         return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->category; // Ou une autre propriété pertinente
     }
 }
