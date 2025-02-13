@@ -84,31 +84,46 @@
 								Apply for this job
 							</a>
 						{% endif %}
-
 					</div>
 				</div>
 			</div>
 
 			<nav class="single-post-navigation no-margin" role="navigation">
 				<div class="row">
-
 					<div class="col-xs-6 col-sm-6 col-md-4">
-						<div class="previous-post-link">
-							<a class="btn border primary waves-effect waves-dark" href="#!">
-								<i class="fa fa-long-arrow-left"></i>Previous
-							</a>
-						</div>
+						{% if previousJob %}
+							<div class="previous-post-link">
+								<a class="btn border primary waves-effect waves-dark" href="{{ path('app_ls_job_show', {name: previousJob.name}) }}">
+									<i class="fa fa-long-arrow-left"></i>
+									Previous
+								</a>
+							</div>
+						{% else %}
+							<div class="previous-post-link disabled">
+								<p class="btn border primary waves-effect waves-dark" href="#!">
+								No more previous job offer
+								</p>
+							</div>
+						{% endif %}
 					</div>
+
 					<div class="hidden-xs hidden-sm col-md-4"></div>
 
-
 					<div class="col-xs-6 col-sm-6 col-md-4">
-						<div class="next-post-link">
-							<a class="btn border primary waves-effect waves-dark" href="#!">
-								Next
-								<i class="fa fa-long-arrow-right"></i>
-							</a>
-						</div>
+						{% if nextJob %}
+							<div class="next-post-link">
+								<a class="btn border primary waves-effect waves-dark" href="{{ path('app_ls_job_show', {name: nextJob.name}) }}">
+									Next
+									<i class="fa fa-long-arrow-right"></i>
+								</a>
+							</div>
+						{% else %}
+							<div class="next-post-link disabled">
+								<p class="btn border primary waves-effect waves-dark" href="#!">
+									No more next job offer
+								</p>
+							</div>
+						{% endif %}
 					</div>
 
 				</div>

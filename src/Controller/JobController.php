@@ -57,7 +57,7 @@ final class JobController extends AbstractController
     }
 
     #[Route('/job/{name}', name: 'app_ls_job_show')]
-    public function jobsShow(string $name): Response
+    public function jobsShow(string $name, EntityManagerInterface $entityManager): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -70,9 +70,31 @@ final class JobController extends AbstractController
             throw $this->createNotFoundException('Job not found');
         }
 
-        return $this->render('job/show.html.twig', [
-            'job' => $job,
-        ]);
+    // Récupérer l'offre précédente et suivante en fonction de l'ID
+    $previousJob = $entityManager->getRepository(Job::class)
+        ->createQueryBuilder('j')
+        ->where('j.id < :currentId')
+        ->orderBy('j.id', 'DESC')
+        ->setParameter('currentId', $job->getId())
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    $nextJob = $entityManager->getRepository(Job::class)
+        ->createQueryBuilder('j')
+        ->where('j.id > :currentId')
+        ->orderBy('j.id', 'ASC')
+        ->setParameter('currentId', $job->getId())
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    // Passer les résultats au template
+    return $this->render('job/show.html.twig', [
+        'job' => $job,
+        'previousJob' => $previousJob,
+        'nextJob' => $nextJob
+    ]);
     }
 
 
