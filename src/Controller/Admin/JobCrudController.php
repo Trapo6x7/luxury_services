@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -33,7 +34,7 @@ class JobCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Nom du job'),
-            TextEditorField::new('description', 'Description'),
+            TextareaField::new('description', 'Description'),
             DateTimeField::new('created_at', 'Date de création')->setFormat('dd/MM/yyyy HH:mm')->hideOnForm(),
             DateTimeField::new('updated_at', 'Date de mise à jour')->setFormat('dd/MM/yyyy HH:mm')->hideOnForm(),
             DateTimeField::new('deleted_at', 'Supprimé le')->setFormat('dd/MM/yyyy HH:mm')->onlyOnDetail(),
@@ -55,7 +56,6 @@ class JobCrudController extends AbstractCrudController
             /** @var User $user */
             $userId = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()])->getId();
             $recruiter = $entityManager->getRepository(Recruiter::class)->findOneBy(['user' => $userId]);
-            dd($recruiter);
             $entityInstance->setRecruiter($recruiter);
         }
 
