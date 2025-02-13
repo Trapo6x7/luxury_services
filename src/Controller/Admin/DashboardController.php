@@ -94,14 +94,13 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Offer', 'fas fa-user-tie', Job::class);
 
         } else if (in_array('ROLE_RECRUITER', $roles)) {
-
+            
             yield MenuItem::section('Recruters');
             yield MenuItem::linkToCrud('Company', 'fas fa-user-tie', Recruiter::class);
 
             yield MenuItem::section('Jobs');
-            yield MenuItem::linkToCrud('Category', 'fas fa-user-tie', JobCategory::class);
             yield MenuItem::linkToCrud('Offer', 'fas fa-user-tie', Job::class);
-            
+
         }
     }
 }

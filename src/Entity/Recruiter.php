@@ -44,6 +44,9 @@ class Recruiter
     #[ORM\OneToMany(targetEntity: Job::class, mappedBy: 'recruiter')]
     private Collection $job;
 
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
     public function __construct()
     {
         $this->job = new ArrayCollection();
@@ -164,6 +167,18 @@ class Recruiter
                 $job->setRecruiter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
 
         return $this;
     }

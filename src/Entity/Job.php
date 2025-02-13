@@ -3,8 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\JobRepository;
+use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
 class Job
@@ -17,18 +21,17 @@ class Job
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updated_at = null;
+   
+    #[ORM\Column]
+    #[Assert\NotNull]
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $deleted_at = null;
+    #[Assert\NotNull]
+    private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?JobCategory $category = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deletedAt = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -36,8 +39,23 @@ class Job
     #[ORM\ManyToOne(inversedBy: 'job')]
     private ?Recruiter $recruiter = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'jobs')]
     private ?Contract $contract = null;
+
+    #[ORM\ManyToOne(inversedBy: 'jobs')]
+    private ?JobCategory $jobCategory = null;
+
+
+
+
+    public function __construct(DateTimeImmutable $createdAt = new DateTimeImmutable(), DateTimeImmutable $updatedAt = new DateTimeImmutable(),  ?DateTimeImmutable $deletedAt = null)
+    {
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
+        $this->deletedAt = $deletedAt;
+
+    }
+
 
     public function getId(): ?int
     {
@@ -58,51 +76,41 @@ class Job
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeImmutable $created_at): static
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $updated_at): static
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
     public function getDeletedAt(): ?\DateTimeImmutable
     {
-        return $this->deleted_at;
+        return $this->deletedAt;
     }
 
-    public function setDeletedAt(\DateTimeImmutable $deleted_at): static
+    public function setDeletedAt(\DateTimeImmutable $deletedAt): static
     {
-        $this->deleted_at = $deleted_at;
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }
 
-    public function getCategory(): ?JobCategory
-    {
-        return $this->category;
-    }
 
-    public function setCategory(JobCategory $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
 
     public function getName(): ?string
     {
@@ -139,4 +147,19 @@ class Job
 
         return $this;
     }
+
+    public function getJobCategory(): ?JobCategory
+    {
+        return $this->jobCategory;
+    }
+
+    public function setJobCategory(?JobCategory $jobCategory): static
+    {
+        $this->jobCategory = $jobCategory;
+
+        return $this;
+    }
+
+   
+  
 }
