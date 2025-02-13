@@ -45,6 +45,21 @@ class Job
     #[ORM\ManyToOne(inversedBy: 'jobs')]
     private ?JobCategory $jobCategory = null;
 
+    #[ORM\Column]
+    private ?int $salary = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $location = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $startingDate = null;
+
+    /**
+     * @var Collection<int, Candidate>
+     */
+    #[ORM\ManyToMany(targetEntity: Candidate::class, inversedBy: 'jobs')]
+    private Collection $candidates;
+
 
 
 
@@ -53,7 +68,7 @@ class Job
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->deletedAt = $deletedAt;
-
+        $this->candidates = new ArrayCollection();
     }
 
 
@@ -160,6 +175,64 @@ class Job
         return $this;
     }
 
-   
+    public function getSalary(): ?int
+    {
+        return $this->salary;
+    }
+
+    public function setSalary(int $salary): static
+    {
+        $this->salary = $salary;
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): static
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function getStartingDate(): ?\DateTimeImmutable
+    {
+        return $this->startingDate;
+    }
+
+    public function setStartingDate(\DateTimeImmutable $startingDate): static
+    {
+        $this->startingDate = $startingDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Candidate>
+     */
+    public function getCandidates(): Collection
+    {
+        return $this->candidates;
+    }
+
+    public function addCandidate(Candidate $candidate): static
+    {
+        if (!$this->candidates->contains($candidate)) {
+            $this->candidates->add($candidate);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidate(Candidate $candidate): static
+    {
+        $this->candidates->removeElement($candidate);
+
+        return $this;
+    }
   
 }

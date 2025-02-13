@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\CandidateRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -80,10 +82,17 @@ class Candidate
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cv = null;
 
+    /**
+     * @var Collection<int, Job>
+     */
+    #[ORM\ManyToMany(targetEntity: Job::class, mappedBy: 'candidates')]
+    private Collection $jobs;
+
     public function __construct(DateTimeImmutable $createdAt = new DateTimeImmutable(), DateTimeImmutable $updatedAt = new DateTimeImmutable())
     {
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+        $this->jobs = new ArrayCollection();
     }
 
 
@@ -341,6 +350,33 @@ class Candidate
     public function setCv(?string $cv): static
     {
         $this->cv = $cv;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Job>
+     */
+    public function getJobs(): Collection
+    {
+        return $this->jobs;
+    }
+
+    public function addJob(Job $job): static
+    {
+        if (!$this->jobs->contains($job)) {
+            $this->jobs->add($job);
+            $job->addCandidate($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJob(Job $job): static
+    {
+        if ($this->jobs->removeElement($job)) {
+            $job->removeCandidate($this);
+        }
 
         return $this;
     }

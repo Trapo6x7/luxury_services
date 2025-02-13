@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -39,6 +40,7 @@ class UserCrudController extends AbstractCrudController
                 ])
                 ->allowMultipleChoices()
                 ->renderExpanded(),
+            BooleanField::new('isVerified', 'Vérifié'),
         ];
     }
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void

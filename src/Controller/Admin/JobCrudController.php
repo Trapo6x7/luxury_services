@@ -10,10 +10,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use Symfony\Bundle\SecurityBundle\Security;
+
 
 class JobCrudController extends AbstractCrudController
 {
@@ -44,7 +46,9 @@ class JobCrudController extends AbstractCrudController
             AssociationField::new('contract', 'Contrat')
                 ->setCrudController(ContractCrudController::class)
                 ->autocomplete(),
-
+            IntegerField::new('salary', 'Salaire'),
+            TextField::new('location', 'Lieu'),
+            DateTimeField::new('startingDate', 'Date de début de mission')->setFormat('dd/MM/yyyy HH:mm'),
         ];
     }
 
@@ -77,5 +81,4 @@ class JobCrudController extends AbstractCrudController
 
         parent::updateEntity($entityManager, $entityInstance);
     }
-    
 }
