@@ -5,6 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\Recruiter;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -74,5 +77,16 @@ class RecruiterCrudController extends AbstractCrudController
         }
 
         parent::updateEntity($entityManager, $entityInstance);
+    }
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityPermission('ROLE_RECRUITER'); // Restriction d'accès au CRUD
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable(Action::NEW, Action::DELETE); // Désactive la création, modification et suppression
     }
 }

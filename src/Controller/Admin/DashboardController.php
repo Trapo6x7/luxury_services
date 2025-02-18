@@ -76,7 +76,7 @@ class DashboardController extends AbstractDashboardController
 
         /** @var User $user */
         if (in_array('ROLE_ADMIN', $roles)) {
-
+            
             yield MenuItem::section('Candidates');
             yield MenuItem::linkToCrud('Genders', 'fas fa-venus-mars', Gender::class);
             yield MenuItem::linkToCrud('Experience', 'fas fa-briefcase', Experience::class);
