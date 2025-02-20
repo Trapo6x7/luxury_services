@@ -9,10 +9,12 @@ use App\Entity\User;
 use App\Repository\JobCategoryRepository;
 use App\Repository\JobRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 final class JobController extends AbstractController
 {
@@ -20,12 +22,14 @@ final class JobController extends AbstractController
     private JobCategoryRepository $jobCategoryRepository;
     private EntityManagerInterface $entityManager;
     private Security $security;
+    private PaginatorInterface $paginator;
 
     public function __construct(
         JobRepository $jobRepository,
         JobCategoryRepository $jobCategoryRepository,
         EntityManagerInterface $entityManager,
-        Security $security
+        Security $security,
+       
     ) {
         $this->jobRepository = $jobRepository;
         $this->jobCategoryRepository = $jobCategoryRepository;
@@ -34,8 +38,10 @@ final class JobController extends AbstractController
     }
 
     #[Route('/job', name: 'app_ls_job')]
-    public function jobs(): Response
-    {
+    public function jobs( Request $request, PaginatorInterface $paginator): Response
+    { 
+    
+
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
@@ -49,9 +55,15 @@ final class JobController extends AbstractController
         $jobs = $this->jobRepository->findBy($criteria, $orderBy, $limit, $offset);
         $jobCategories = $this->jobCategoryRepository->findAll();
 
+        $pagination = $paginator->paginate(
+            $jobs,
+            $request->query->getInt('page', 1),
+            12
+        );
+
         return $this->render('job/index.html.twig', [
             'controller_name' => 'JobController',
-            'jobs' => $jobs,
+            'jobs' => $pagination,
             'jobCategories' => $jobCategories,
         ]);
     }
