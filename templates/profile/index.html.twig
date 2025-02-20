@@ -85,11 +85,16 @@
 		<div class="container">
 			<div class="row">
 				<div class="score-container">
+				{% if candidate.completionPercent == 100%}
 					<h4>
 						<img src="{{ asset('img/s9bPVaK.gif')}}" style="height: 80px; width: 201px;">
-						&nbsp;
-																																																																																																                            &nbsp; Hooray ! Your profile is complete.
+					    &nbsp; Hooray ! Your profile is complete.
 					</h4>
+					{% else %}
+					<h4 style="color: red;">
+					    &nbsp; Keep up ! Your profile is almost complete.
+					</h4>
+					{% endif %}
 					<div class="c100 p{{ candidate.completionPercent }} small  {% if candidate.completionPercent < 50 %}red
     {% elseif candidate.completionPercent < 90 %}orange
     {% else %}complete
