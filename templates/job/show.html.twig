@@ -74,7 +74,8 @@
 								</span>
 								{{ job.startingDate|date('Y-m-d H:i:s') }}</li>
 						</ul>
-						{% set isCandidate = job.candidates|filter(c => c.id == app.user.id) is not empty %}
+						{% set filteredCandidates = job.candidates|filter(c => c.user == app.user) %}
+						{% set isCandidate = filteredCandidates|length > 0 %}
 						{% if isCandidate %}
 							<div class="btn btn-block btn-success mt-30 waves-effect waves-light disabled">
 								You have applied for this job
@@ -101,7 +102,7 @@
 						{% else %}
 							<div class="previous-post-link disabled">
 								<p class="btn border primary waves-effect waves-dark" href="#!">
-								No more previous job offer
+									No more previous job offer
 								</p>
 							</div>
 						{% endif %}
