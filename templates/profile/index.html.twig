@@ -90,8 +90,11 @@
 						&nbsp;
 																																																																																																                            &nbsp; Hooray ! Your profile is complete.
 					</h4>
-					<div class="c100 p100 small complete ">
-						<span>100%</span>
+					<div class="c100 p{{ candidate.completionPercent }} small  {% if candidate.completionPercent < 50 %}red
+    {% elseif candidate.completionPercent < 90 %}orange
+    {% else %}complete
+    {% endif %} ">
+						<span>{{ candidate.completionPercent }}</span>
 						<div class="slice">
 							<div class="bar"></div>
 							<div class="fill"></div>

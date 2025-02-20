@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Attribute\ProfileField;
 use App\Repository\CandidateRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,28 +20,36 @@ class Candidate
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $currentlocation = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $adress = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $country = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $nationality = null;
 
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    #[ProfileField()]
     private ?DateTimeImmutable $birthdate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $birthplace = null;
 
     #[ORM\Column]
@@ -56,14 +65,17 @@ class Candidate
 
     #[ORM\OneToOne(targetEntity: Gender::class, inversedBy: 'candidate')]
     #[ORM\JoinColumn(name: 'gender_id', referencedColumnName: 'id', nullable: true)]
+    #[ProfileField()]
     private ?Gender $gender = null;
 
     #[ORM\OneToOne(targetEntity: JobCategory::class, inversedBy: 'candidate')]
     #[ORM\JoinColumn(name: 'job_category_id', referencedColumnName: 'id', nullable: true)]
+    #[ProfileField()]
     private ?JobCategory $jobCategory = null;
 
     #[ORM\OneToOne(targetEntity: Experience::class, inversedBy: 'candidate')]
     #[ORM\JoinColumn(name: 'experience_id', referencedColumnName: 'id', nullable: true)]
+    #[ProfileField()]
     private ?Experience $experience = null;
 
     #[ORM\OneToOne(inversedBy: 'candidate', cascade: ['persist', 'remove'])]
@@ -71,15 +83,19 @@ class Candidate
     private ?User $user = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ProfileField()]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $profilePicture = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $passport = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[ProfileField()]
     private ?string $cv = null;
 
     /**
@@ -87,6 +103,9 @@ class Candidate
      */
     #[ORM\ManyToMany(targetEntity: Job::class, mappedBy: 'candidates')]
     private Collection $jobs;
+
+    #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
+    private ?int $completionPercent = 0;
 
     public function __construct(DateTimeImmutable $createdAt = new DateTimeImmutable(), DateTimeImmutable $updatedAt = new DateTimeImmutable())
     {
@@ -377,6 +396,18 @@ class Candidate
         if ($this->jobs->removeElement($job)) {
             $job->removeCandidate($this);
         }
+
+        return $this;
+    }
+
+    public function getCompletionPercent(): ?int
+    {
+        return $this->completionPercent;
+    }
+
+    public function setCompletionPercent(int $completionPercent): static
+    {
+        $this->completionPercent = $completionPercent;
 
         return $this;
     }

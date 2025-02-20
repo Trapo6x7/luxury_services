@@ -6,6 +6,7 @@ use App\Entity\Candidate;
 use App\Entity\User;
 use App\Form\CandidateFormType;
 use App\Service\FileUploader;
+use App\Service\ProfileProgressionCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
-    public function index(Request $request,  FileUploader $fileUploader, EntityManagerInterface $entityManager,  UserPasswordHasherInterface $passwordHasher,    MailerInterface $mailer): Response
+    public function index(Request $request,  FileUploader $fileUploader, EntityManagerInterface $entityManager,  UserPasswordHasherInterface $passwordHasher, ProfileProgressionCalculator $completionPercent, MailerInterface $mailer): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -104,6 +105,9 @@ final class ProfileController extends AbstractController
                     $this->addFlash('danger', 'Email and password must be filled together to change password.');
                 }
             }
+            // CompletionPercentInterface
+            $completionPercent->calculateProgress($candidate);
+
             $entityManager->persist($candidate);
             $entityManager->flush();
             // Redirige l'utilisateur vers la page de profil après une soumission réussie

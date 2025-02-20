@@ -26,3 +26,6 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'
+
+    App\Service\ProfileProgressionCalculator:
+        tags: ["app.profile_progression_calculator"]

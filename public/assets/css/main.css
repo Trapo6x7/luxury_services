@@ -202,6 +202,14 @@ Count Up
 .counter-wrap {
     padding: 120px 0;
 }
+.red .bar, .red .fill {
+    background-color: red;
+}
+
+.orange .bar, .orange .fill {
+    background-color: orange;
+}
+
 @media screen and (max-width: 767px) {
     .counter-wrap {
         padding: 60px 0;
