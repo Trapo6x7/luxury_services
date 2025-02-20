@@ -182,6 +182,13 @@ Alert With Extra Information
     opacity: 1;
     font-size: 25px;
 }
+.picture{
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    margin-top: 5px;
+    
+}
 @media (max-width: 767px) {
     .alert-box .icon-wrap {
         width: 50px;

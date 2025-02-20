@@ -13,54 +13,6 @@
 	</style>
 {% endblock %}
 
-{% block javascripts %}
-	{{ parent() }}
-	<script>
-		document.addEventListener('DOMContentLoaded', function () {
-  
-
-			const profilPictureInput = document.getElementById('candidate_profilPictureFile');
-			const profilPicturePathInput = document.getElementById('file-path-photo');
-			const existingProfilPictureFile = document.getElementById('existing-file-photo');
-
-			profilPictureInput.addEventListener('change', function () {
-				if (profilPictureInput.files.length > 0) {
-					profilPicturePathInput.value = profilPictureInput.files[0].name;
-					if (existingProfilPictureFile) {
-						existingProfilPictureFile.style.display = 'none';
-					}
-				}
-			});
-
-			const passportInput = document.getElementById('candidate_passportFile');
-			const passportPathInput = document.getElementById('file-path-passport');
-			const existingPassportFile = document.getElementById('existing-file-passport');
-
-			passportInput.addEventListener('change', function () {
-				if (passportInput.files.length > 0) {
-					passportPathInput.value = passportInput.files[0].name;
-					if (existingPassportFile) {
-						existingPassportFile.style.display = 'none';
-					}
-				}
-			});
-
-			const cvInput = document.getElementById('candidate_cvFile');
-			const cvPathInput = document.getElementById('file-path-cv');
-			const existingCvFile = document.getElementById('existing-file-cv');
-
-			cvInput.addEventListener('change', function () {
-				if (cvInput.files.length > 0) {
-					cvPathInput.value = cvInput.files[0].name;
-					if (existingCvFile) {
-						existingCvFile.style.display = 'none';
-					}
-				}
-			});
-		});
-	</script>
-{% endblock %}
-
 {% block body %}
 	<!-- Page Header-->
 	<section class="page-title page-title-bg fixed-bg overlay dark-5 padding-top-160 padding-bottom-80">
@@ -85,21 +37,21 @@
 		<div class="container">
 			<div class="row">
 				<div class="score-container">
-				{% if candidate.completionPercent == 100%}
-					<h4>
-						<img src="{{ asset('img/s9bPVaK.gif')}}" style="height: 80px; width: 201px;">
-					    &nbsp; Hooray ! Your profile is complete.
-					</h4>
+					{% if candidate.completionPercent == 100%}
+						<h4>
+							<img src="{{ asset('img/s9bPVaK.gif')}}" style="height: 80px; width: 201px;">
+							&nbsp; Hooray ! Your profile is complete.
+						</h4>
 					{% else %}
-					<h4 style="color: red;">
-					    &nbsp; Keep up ! Your profile is almost complete.
-					</h4>
+						<h4 style="color: red;">
+							&nbsp; Keep up ! Your profile is almost complete.
+						</h4>
 					{% endif %}
 					<div class="c100 p{{ candidate.completionPercent }} small  {% if candidate.completionPercent < 50 %}red
-    {% elseif candidate.completionPercent < 90 %}orange
-    {% else %}complete
-    {% endif %} ">
-						<span>{{ candidate.completionPercent }}</span>
+							    {% elseif candidate.completionPercent < 90 %}orange
+							    {% else %}complete
+							    {% endif %} ">
+						<span>{{ candidate.completionPercent }}%</span>
 						<div class="slice">
 							<div class="bar"></div>
 							<div class="fill"></div>
@@ -170,16 +122,17 @@
 							{{ form_errors(candidateForm.profilePictureFile) }}
 						</div>
 						{# {% if candidate.ProfilepicturePath %}
-    <img src="{{ asset(candidate.ProfilepicturePath) }}" alt="Profile Picture">
-{% endif %} #}
+						    <img src="{{ asset(candidate.ProfilepicturePath) }}" alt="Profile Picture">
+						{% endif %} #}
 
-						<div class="existing-file">
+						<div class="existing-file-photo">
 							<a href="#!" target="_blank">
 								<i class="material-icons">&#xE24D;</i>
-								profil_picture.jpg</a>
+								{{ candidate.profilePicture }}</a>
+							<img id='candidate_profilPictureFile' class="picture" src="{{ asset('assets/uploads/profiles/' ~ candidate.profilePicture) }}" alt="">
 						</div>
-						<div class="file-path-wrapper">
-							<input class="file-path validate" type="text" placeholder="Upload your ID photo" readonly>
+						<div class="file-path-photo">
+							<input class="file-path validate" type="text" readonly>
 						</div>
 					</div>
 				</div>
@@ -228,10 +181,10 @@
 							<div class="existing-file">
 								<a href="#!" target="_blank">
 									<i class="material-icons">&#xE24D;</i>
-									passeport.jpg</a>
+									{{ candidate.passport }}</a>
 							</div>
-							<div class="file-path-wrapper">
-								<input class="file-path validate" type="text" placeholder="Upload your passport" readonly>
+							<div class="file-path-passport">
+								<input class="file-path validate" type="text" readonly>
 							</div>
 						</div>
 
@@ -247,7 +200,7 @@
 							<div class="existing-file">
 								<a href="#!" target="_blank">
 									<i class="material-icons">&#xE24D;</i>
-									CV.pdf</a>
+									{{ candidate.cv }}</a>
 							</div>
 							<div class="file-path-wrapper">
 								<input class="file-path validate" type="text" placeholder="Upload your Curriculum Vitae" readonly>
@@ -296,17 +249,15 @@
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4">
-					<div
-						class="input-field">
-									{{ form_widget(candidateForm.newPassword.first) }}
+					<div class="input-field">
+						{{ form_widget(candidateForm.newPassword.first) }}
 						{{ form_label(candidateForm.newPassword.first) }}
 						{{ form_errors(candidateForm.newPassword.first) }}
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4">
-					<div
-						class="input-field">
-											{{ form_widget(candidateForm.newPassword.second) }}
+					<div class="input-field">
+						{{ form_widget(candidateForm.newPassword.second) }}
 						{{ form_label(candidateForm.newPassword.second) }}
 						{{ form_errors(candidateForm.newPassword.second) }}
 					</div>
@@ -335,4 +286,52 @@
 		</div>
 	</section>
 	{{ form_end(candidateForm) }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+
+
+const profilPictureInput = document.getElementById('candidate_profilPictureFile');
+const profilPicturePathInput = document.getElementById('file-path-photo');
+const existingProfilPictureFile = document.getElementById('existing-file-photo');
+
+profilPictureInput.addEventListener('change', function () {
+if (profilPictureInput.files.length > 0) {
+profilPicturePathInput.value = profilPictureInput.files[0].name;
+if (existingProfilPictureFile) {
+existingProfilPictureFile.style.display = 'none';
+}
+}
+});
+
+const passportInput = document.getElementById('candidate_passportFile');
+const passportPathInput = document.getElementById('file-path-passport');
+const existingPassportFile = document.getElementById('existing-file');
+
+passportInput.addEventListener('change', function () {
+if (passportInput.files.length > 0) {
+passportPathInput.value = passportInput.files[0].name;
+if (existingPassportFile) {
+existingPassportFile.style.display = 'none';
+}
+}
+});
+
+const cvInput = document.getElementById('candidate_cvFile');
+const cvPathInput = document.getElementById('file-path-cv');
+const existingCvFile = document.getElementById('existing-file-cv');
+
+cvInput.addEventListener('change', function () {
+if (cvInput.files.length > 0) {
+cvPathInput.value = cvInput.files[0].name;
+if (existingCvFile) {
+existingCvFile.style.display = 'none';
+}
+}
+});
+});
+	</script>
 {% endblock %}
