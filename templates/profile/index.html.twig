@@ -126,7 +126,7 @@
 						{% endif %} #}
 
 						<div class="existing-file-photo">
-							<a href="#!" target="_blank">
+							<a href="./assets/uploads/profiles/{{candidate.profilePicture}}" target="_blank">
 								<i class="material-icons">&#xE24D;</i>
 								{{ candidate.profilePicture }}</a>
 							<img id='candidate_profilPictureFile' class="picture" src="{{ asset('assets/uploads/profiles/' ~ candidate.profilePicture) }}" alt="">
@@ -179,7 +179,7 @@
 								{{ form_errors(candidateForm.passportFile) }}
 							</div>
 							<div class="existing-file">
-								<a href="#!" target="_blank">
+								<a href="./assets/uploads/passports/{{candidate.passport}}" target="_blank">
 									<i class="material-icons">&#xE24D;</i>
 									{{ candidate.passport }}</a>
 							</div>
@@ -198,7 +198,7 @@
 							</div>
 
 							<div class="existing-file">
-								<a href="#!" target="_blank">
+								<a href="./assets/uploads/cvs/{{candidate.cv}}"target="_blank">
 									<i class="material-icons">&#xE24D;</i>
 									{{ candidate.cv }}</a>
 							</div>
