@@ -36,7 +36,7 @@ class Job
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'job')]
+    #[ORM\ManyToOne(inversedBy: 'job', cascade: ['persist'])]
     private ?Recruiter $recruiter = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobs')]
